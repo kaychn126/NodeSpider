@@ -1,0 +1,17 @@
+{
+  "name": "NodeSpider",
+  "version": "1.0.0",
+  "description": "a spider",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodespider"
+  },
+  "author": "chenkai",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.0.0-rc.5",
+    "cheerio": "^0.20.0",
+    "eventproxy": "^0.3.4",
+    "superagent": "^2.0.0"
+  }
+}
