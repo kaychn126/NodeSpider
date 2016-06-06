@@ -17,7 +17,13 @@ var conn = mysql.createConnection({
 });
 
 function startSpider(){
-    conn.connect();
+    connection.connect(function(err) {
+        if (err) {
+            console.error('error connecting: ' + err.stack);
+            return;
+        }
+        console.log('connected as id ' + connection.threadId);
+    });
     tangQiaoBlogSpider();
 };
 
@@ -48,7 +54,13 @@ function tangQiaoBlogSpider(){
                                 article.title = currentPageUrls.eq(i).find('a').attr('title');
                                 article.url = 'http://blog.devtang.com' + currentPageUrls.eq(i).find('a').attr('href');
                                 article.pubDate = currentPageUrls.eq(i).find('time').text();
-                                console.log(article);
+                                connection.query('insert into IOSBlogTable values ?', article, function(error){
+                                    if (error) {
+                                        console.log(error.message);
+                                    } else {
+                                        console.log('insert success');
+                                    }
+                                });
                                 articleList.push(article);
                             }
                         });
