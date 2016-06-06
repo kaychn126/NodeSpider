@@ -56,7 +56,7 @@ function tangQiaoBlogSpider(){
                                 article.url = 'http://blog.devtang.com' + currentPageUrls.eq(i).find('a').attr('href');
                                 article.pubDate = currentPageUrls.eq(i).find('time').text();
                                 connection.query('select * from IOSBlogTable where title = ?',[article.title],function(err1, rows){
-                                    if (rows.length() == 0) {
+                                    if (!rows) {
                                         connection.query('insert into IOSBlogTable set ?', article, function(error){
                                             if (error) {
                                                 console.log(error.message);
