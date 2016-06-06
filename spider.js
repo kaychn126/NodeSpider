@@ -13,8 +13,7 @@ var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'debian-sys-maint',
     password : 'mlwkoTqE8leeqbL9',
-    database : 'IOSBlogDB',
-    charset:'UTF8_GENERAL_CI'
+    database : 'IOSBlogDB'
 });
 
 function startSpider(){
@@ -56,6 +55,7 @@ function tangQiaoBlogSpider(){
                                 article.title = currentPageUrls.eq(i).find('a').attr('title');
                                 article.url = 'http://blog.devtang.com' + currentPageUrls.eq(i).find('a').attr('href');
                                 article.pubDate = currentPageUrls.eq(i).find('time').text();
+                                console.log(article);
                                 connection.query('insert into IOSBlogTable set ?', article, function(error){
                                     if (error) {
                                         console.log(error.message);
