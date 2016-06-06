@@ -13,7 +13,8 @@ var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'debian-sys-maint',
     password : 'mlwkoTqE8leeqbL9',
-    database : 'IOSBlogDB'
+    database : 'IOSBlogDB',
+    charset:'UTF8_GENERAL_CI'
 });
 
 function startSpider(){
@@ -22,6 +23,7 @@ function startSpider(){
             console.error('error connecting: ' + err.stack);
             return;
         }
+
         console.log('connected as id ' + connection.threadId);
     });
     tangQiaoBlogSpider();
