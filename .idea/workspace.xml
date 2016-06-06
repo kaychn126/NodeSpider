@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a481b5ad-8592-4c37-8c03-a9038c02bc2f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spider.js" afterPath="$PROJECT_DIR$/spider.js" />
-    </list>
+    <list default="true" id="a481b5ad-8592-4c37-8c03-a9038c02bc2f" name="Default" comment="" />
     <ignored path="NodeSpider.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -135,8 +133,8 @@
     <detection-done>true</detection-done>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="8" />
-    <option name="y" value="79" />
+    <option name="x" value="519" />
+    <option name="y" value="236" />
     <option name="width" value="1837" />
     <option name="height" value="1038" />
   </component>
@@ -264,7 +262,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="8" y="79" width="1837" height="1038" extended-state="0" />
+    <frame x="519" y="236" width="1837" height="1038" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16059603" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
