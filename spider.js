@@ -13,7 +13,7 @@ var conn = mysql.createConnection({
     host     : 'localhost',
     user     : 'debian-sys-maint',
     password : 'mlwkoTqE8leeqbL9',
-    database : 'IOSBlogBase'
+    database : 'IOSBlogDB'
 });
 
 function startSpider(){
