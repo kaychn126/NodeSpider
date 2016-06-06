@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "a spider",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaychn126/NodeSpider.git"
+  },
   "scripts": {
     "test": "nodespider"
   },
@@ -12,6 +16,7 @@
     "async": "^2.0.0-rc.5",
     "cheerio": "^0.20.0",
     "eventproxy": "^0.3.4",
-    "superagent": "^2.0.0"
+    "superagent": "^2.0.0",
+    "node-mysql": "^2.10.2"
   }
 }

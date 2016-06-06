@@ -6,10 +6,18 @@ var http = require("http"),
     superagent = require("superagent"),
     cheerio = require("cheerio"),
     async = require("async"),
-    eventproxy = require('eventproxy');
+    eventproxy = require("eventproxy"),
+    mysql = require("mysql");
 
+var conn = mysql.createConnection({
+    host     : 'localhost',
+    user     : 'debian-sys-maint',
+    password : 'mlwkoTqE8leeqbL9',
+    database : 'IOSBlogBase'
+});
 
 function startSpider(){
+    conn.connect();
     tangQiaoBlogSpider();
 };
 
@@ -46,11 +54,9 @@ function tangQiaoBlogSpider(){
                         });
                 });
             } else {
-                console.log("请求页面失败");
+                console.log("请求页面失败:" + err);
             }
         });
-
-
 };
 
 exports.startSpider = startSpider;
