@@ -9,23 +9,26 @@ function articleList(response) {
         database : 'IOSBlogDB'
     });
 
-    connection.connect(function(err) {
-        if (err) {
-            console.log('error connecting: ' + err.stack);
-            return;
-        }
-        connection.query('select * from IOSBlogTable', function(err2, rows){
-            if (err2){
-                console.log(err2);
-            }
-            response.writeHead(200, {'Content-Type': 'text/html'});
-            response.write('<head><meta charset="utf-8"/></head>');
-            response.write(rows);
-            response.end();
-        });
-    });
-
-
+    response.writeHead(200, {'Content-Type': 'text/html'});
+    response.write('<head><meta charset="utf-8"/></head>');
+    response.write('articleList');
+    response.end();
+    
+    //connection.connect(function(err) {
+    //    if (err) {
+    //        console.log('error connecting: ' + err.stack);
+    //        return;
+    //    }
+    //    connection.query('select * from IOSBlogTable', function(err2, rows){
+    //        if (err2){
+    //            console.log(err2);
+    //        }
+    //        response.writeHead(200, {'Content-Type': 'text/html'});
+    //        response.write('<head><meta charset="utf-8"/></head>');
+    //        response.write(rows);
+    //        response.end();
+    //    });
+    //});
 };
 
 
