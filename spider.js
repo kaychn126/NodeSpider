@@ -9,7 +9,7 @@ var http = require("http"),
     eventproxy = require("eventproxy"),
     mysql = require("mysql");
 
-var conn = mysql.createConnection({
+var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'debian-sys-maint',
     password : 'mlwkoTqE8leeqbL9',
