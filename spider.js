@@ -55,13 +55,17 @@ function tangQiaoBlogSpider(){
                                 article.title = currentPageUrls.eq(i).find('a').attr('title');
                                 article.url = 'http://blog.devtang.com' + currentPageUrls.eq(i).find('a').attr('href');
                                 article.pubDate = currentPageUrls.eq(i).find('time').text();
-                                console.log(article);
-                                connection.query('insert into IOSBlogTable set ?', article, function(error){
-                                    if (error) {
-                                        console.log(error.message);
+                                connection.query('select * from IOSBlogTable where title = ?',[article.title],function(err1, rows){
+                                    if (rows.length == 0) {
+                                        connection.query('insert into IOSBlogTable set ?', article, function(error){
+                                            if (error) {
+                                                console.log(error.message);
+                                            }
+                                        });
+                                    } else {
+                                        console.log('文章已存在');
                                     }
                                 });
-                                articleList.push(article);
                             }
                         });
                 });

@@ -11,7 +11,7 @@ function articleList(response) {
 
     connection.connect(function(err) {
         if (err) {
-            console.error('error connecting: ' + err.stack);
+            console.log('error connecting: ' + err.stack);
             return;
         }
         connection.query('select * from IOSBlogTable', function(err2, rows){

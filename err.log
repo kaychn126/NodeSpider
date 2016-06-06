@@ -1,0 +1,15 @@
+error connecting: Error: connect ECONNREFUSED 127.0.0.1:3306
+    at Object.exports._errnoException (util.js:855:11)
+    at exports._exceptionWithHostPort (util.js:878:20)
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1063:14)
+    --------------------
+    at Protocol._enqueue (/Users/easybenefit/Documents/NodeJs/NodeSpider/node_modules/mysql/lib/protocol/Protocol.js:141:48)
+    at Protocol.handshake (/Users/easybenefit/Documents/NodeJs/NodeSpider/node_modules/mysql/lib/protocol/Protocol.js:52:41)
+    at Connection.connect (/Users/easybenefit/Documents/NodeJs/NodeSpider/node_modules/mysql/lib/Connection.js:136:18)
+    at Object.startSpider (/Users/easybenefit/Documents/NodeJs/NodeSpider/spider.js:20:16)
+    at Object.<anonymous> (/Users/easybenefit/Documents/NodeJs/NodeSpider/index.js:11:8)
+    at Module._compile (module.js:398:26)
+    at Object.Module._extensions..js (module.js:405:10)
+    at Module.load (module.js:344:32)
+    at Function.Module._load (module.js:301:12)
+    at Function.Module.runMain (module.js:430:10)
