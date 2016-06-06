@@ -17,6 +17,7 @@
     "cheerio": "^0.20.0",
     "eventproxy": "^0.3.4",
     "superagent": "^2.0.0",
-    "node-mysql": "^2.10.2"
+    "node-mysql": "^2.10.2",
+    "node-uuid" : "^1.4.7"
   }
 }

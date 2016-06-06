@@ -7,12 +7,20 @@ var http = require("http"),
     cheerio = require("cheerio"),
     async = require("async"),
     eventproxy = require("eventproxy"),
-    mysql = require("mysql");
+    mysql = require("mysql"),
+    uuid = require("node-uuid");
+
+//var connection = mysql.createConnection({
+//    host     : 'localhost',
+//    user     : 'debian-sys-maint',
+//    password : 'mlwkoTqE8leeqbL9',
+//    database : 'IOSBlogDB'
+//});
 
 var connection = mysql.createConnection({
     host     : 'localhost',
-    user     : 'debian-sys-maint',
-    password : 'mlwkoTqE8leeqbL9',
+    user     : 'root',
+    password : 'kaychn1989',
     database : 'IOSBlogDB'
 });
 
@@ -35,6 +43,7 @@ function tangQiaoBlogSpider(){
 
     superagent.get('http://blog.devtang.com')
         .end(function(err,pres){
+            console.log(pres.text);
             if (!err) {
                 var $ = cheerio.load(pres.text);
                 //获取总页数
@@ -48,23 +57,20 @@ function tangQiaoBlogSpider(){
                         .end(function(err,pres){
                             //console.log(pres.text);
                             var $ = cheerio.load(pres.text);
+
                             var currentPageUrls = $('.post');
                             for(var i = 0; i < currentPageUrls.length; i++){
                                 var article = {};
+                                article.blogId = uuid.v1();
                                 article.auther = '唐巧';
                                 article.title = currentPageUrls.eq(i).find('a').attr('title');
                                 article.url = 'http://blog.devtang.com' + currentPageUrls.eq(i).find('a').attr('href');
                                 article.pubDate = currentPageUrls.eq(i).find('time').text();
-                                connection.query('select * from IOSBlogTable where title = ?',[article.title],function(err1, rows){
-                                    if (!rows) {
-                                        connection.query('insert into IOSBlogTable set ?', article, function(error){
-                                            if (error) {
-                                                console.log(error.message);
-                                            }
-                                        });
-                                    } else {
-                                        console.log('文章已存在');
+                                connection.query('insert into IOSBlogTable set ?', article, function(error){
+                                    if (error) {
+                                        console.log(error.message);
                                     }
+                                    console.log('insert success!');
                                 });
                             }
                         });
