@@ -57,8 +57,6 @@ function tangQiaoBlogSpider(){
                                 connection.query('insert into IOSBlogTable set ?', article, function(error){
                                     if (error) {
                                         console.log(error.message);
-                                    } else {
-                                        console.log('insert success');
                                     }
                                 });
                                 articleList.push(article);
