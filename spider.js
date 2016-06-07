@@ -9,16 +9,16 @@ var http = require("http"),
     eventproxy = require("eventproxy"),
     mysql = require("mysql"),
     uuid = require("node-uuid"),
-    schedule = require("node-schedule"),
-    config = require("./supportingFiles/config"),
-    dbConfig = new config.dbConfig();
+    schedule = require("node-schedule");
+    //config = require("./supportingFiles/config"),
+    //dbConfig = new config.dbConfig();
 
-var pool = mysql.createPool({
-    host     : dbConfig.dbhost,
-    user     : dbConfig.dbuser,
-    password : dbConfig.dbpassword,
-    database : dbConfig.database
-});
+//var pool = mysql.createPool({
+//    host     : dbConfig.dbhost,
+//    user     : dbConfig.dbuser,
+//    password : dbConfig.dbpassword,
+//    database : dbConfig.database
+//});
 
 function startSpider(){
     //var rule = new schedule.RecurrenceRule();
@@ -76,21 +76,21 @@ function tangQiaoBlogSpider(){
         });
 };
 
-function insertArticleList(articleList){
-    console.log('insertArticleList');
-    pool.getConnection(function(err, connection) {
-        if (!err) {
-            connection.query('insert into IOSBlogTable set ?', articleList, function(error){
-                if (error) {
-                    console.log(error.message);
-                }else{
-                    console.log('insert success!');
-                }
-            });
-        } else {
-            console.log(err.message);
-        }
-    });
-};
+//function insertArticleList(articleList){
+//    console.log('insertArticleList');
+//    pool.getConnection(function(err, connection) {
+//        if (!err) {
+//            connection.query('insert into IOSBlogTable set ?', articleList, function(error){
+//                if (error) {
+//                    console.log(error.message);
+//                }else{
+//                    console.log('insert success!');
+//                }
+//            });
+//        } else {
+//            console.log(err.message);
+//        }
+//    });
+//};
 
 exports.startSpider = startSpider;
