@@ -21,15 +21,16 @@ var pool = mysql.createPool({
 });
 
 function startSpider(){
-    var rule = new schedule.RecurrenceRule();
-    //rule.dayOfWeek = [0, new schedule.Range(1,6)];
-    //rule.hour = 8;
-    //rule.minute = 0;
-    rule.second = [0,20,40];
-    var scheduleJob = schedule.scheduleJob(rule, function(){
-        console.log("开始爬取博客");
-        spiderBlogs();
-    });
+    //var rule = new schedule.RecurrenceRule();
+    ////rule.dayOfWeek = [0, new schedule.Range(1,6)];
+    ////rule.hour = 8;
+    ////rule.minute = 0;
+    //rule.second = [0,20,40];
+    //var scheduleJob = schedule.scheduleJob(rule, function(){
+    //    console.log("开始爬取博客");
+    //    spiderBlogs();
+    //});
+    spiderBlogs();
 };
 
 function spiderBlogs(){
@@ -39,8 +40,8 @@ function spiderBlogs(){
 function tangQiaoBlogSpider(){
     var pageList = [],//爬取网址列表
         articleList = [],//文章列表
-        pageNum = 0;
-
+        pageNum = 0,
+        queryPageNum = 0;
     superagent.get('http://blog.devtang.com')
         .end(function(err,pres){
             if (!err) {
@@ -52,33 +53,20 @@ function tangQiaoBlogSpider(){
                     superagent.get(pageUrl)
                         .end(function(err,pres){
                             //console.log(pres.text);
+                            queryPageNum++;
                             var $ = cheerio.load(pres.text);
 
                             var currentPageUrls = $('.post');
                             for(var j = 0; j < currentPageUrls.length; j++){
                                 var article = {};
-                                article.blogId = uuid.v4();
                                 article.auther = '唐巧';
                                 article.title = currentPageUrls.eq(j).find('a').attr('title');
                                 article.url = 'http://blog.devtang.com' + currentPageUrls.eq(j).find('a').attr('href');
                                 article.pubDate = currentPageUrls.eq(j).find('time').text();
-                                pool.getConnection(function(err, connection) {
-                                    if (!err) {
-                                        connection.query('select * from IOSBlogTable where title=?', article.title, function(error, rows){
-                                            if (rows.length == 0) {
-                                                connection.query('insert into IOSBlogTable set ?', article, function(error){
-                                                    if (error) {
-                                                        console.log(error.message);
-                                                    }else{
-                                                        console.log('insert success!');
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    } else {
-                                        console.log(err.message);
-                                    }
-                                });
+                                articleList.push(article);
+                                if (queryPageNum == pageNum && j == currentPageUrls.length-1) {
+                                    //insertArticleList(articleList);
+                                }
                             }
                         });
                 }
@@ -86,6 +74,23 @@ function tangQiaoBlogSpider(){
                 console.log("请求页面失败:" + err);
             }
         });
+};
+
+function insertArticleList(articleList){
+    console.log('insertArticleList');
+    pool.getConnection(function(err, connection) {
+        if (!err) {
+            connection.query('insert into IOSBlogTable set ?', articleList, function(error){
+                if (error) {
+                    console.log(error.message);
+                }else{
+                    console.log('insert success!');
+                }
+            });
+        } else {
+            console.log(err.message);
+        }
+    });
 };
 
 exports.startSpider = startSpider;
