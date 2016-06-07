@@ -1,9 +1,9 @@
 /**
  * Created by chenkai on 16/6/5.
  */
-var config = require("./supportingFiles/config");
-var dbConfig = new config.dbConfig();
-var mysql = require("mysql");
+//var config = require("./supportingFiles/config");
+//var dbConfig = new config.dbConfig();
+//var mysql = require("mysql");
 
 function articleList(response) {
     response.writeHead(200, {'Content-Type': 'text/html'});
