@@ -16,8 +16,10 @@
     "async": "^2.0.0-rc.5",
     "cheerio": "^0.20.0",
     "eventproxy": "^0.3.4",
-    "superagent": "^2.0.0",
+    "later": "^1.2.0",
     "node-mysql": "^2.10.2",
-    "node-uuid" : "^1.4.7"
+    "node-schedule": "^1.1.0",
+    "node-uuid": "^1.4.7",
+    "superagent": "^2.0.0"
   }
 }
