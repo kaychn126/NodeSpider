@@ -10,27 +10,26 @@ var http = require("http"),
     mysql = require("mysql"),
     uuid = require("node-uuid"),
     schedule = require("node-schedule");
-    //config = require("./supportingFiles/config"),
-    //dbConfig = new config.dbConfig();
+    config = require("./supportingFiles/config"),
+    dbConfig = new config.dbConfig();
 
-//var pool = mysql.createPool({
-//    host     : dbConfig.dbhost,
-//    user     : dbConfig.dbuser,
-//    password : dbConfig.dbpassword,
-//    database : dbConfig.database
-//});
+var pool = mysql.createPool({
+    host     : dbConfig.dbhost,
+    user     : dbConfig.dbuser,
+    password : dbConfig.dbpassword,
+    database : dbConfig.database
+});
 
 function startSpider(){
-    //var rule = new schedule.RecurrenceRule();
-    ////rule.dayOfWeek = [0, new schedule.Range(1,6)];
-    ////rule.hour = 8;
-    ////rule.minute = 0;
-    //rule.second = [0,20,40];
-    //var scheduleJob = schedule.scheduleJob(rule, function(){
-    //    console.log("开始爬取博客");
-    //    spiderBlogs();
-    //});
-    spiderBlogs();
+    var rule = new schedule.RecurrenceRule();
+    rule.dayOfWeek = [0, new schedule.Range(1,6)];
+    rule.hour = 8;
+    rule.minute = 0;
+    var scheduleJob = schedule.scheduleJob(rule, function(){
+        console.log("开始爬取博客");
+        spiderBlogs();
+    });
+    //spiderBlogs();
 };
 
 function spiderBlogs(){
@@ -65,7 +64,7 @@ function tangQiaoBlogSpider(){
                                 article.pubDate = currentPageUrls.eq(j).find('time').text();
                                 articleList.push(article);
                                 if (queryPageNum == pageNum && j == currentPageUrls.length-1) {
-                                    //insertArticleList(articleList);
+                                    insertArticleList(articleList);
                                 }
                             }
                         });
@@ -76,21 +75,45 @@ function tangQiaoBlogSpider(){
         });
 };
 
-//function insertArticleList(articleList){
-//    console.log('insertArticleList');
-//    pool.getConnection(function(err, connection) {
-//        if (!err) {
-//            connection.query('insert into IOSBlogTable set ?', articleList, function(error){
-//                if (error) {
-//                    console.log(error.message);
-//                }else{
-//                    console.log('insert success!');
-//                }
-//            });
-//        } else {
-//            console.log(err.message);
-//        }
-//    });
-//};
+function insertArticleList(articleList){
+    if (articleList.length!=0) {
+        pool.getConnection(function(err, connection) {
+            if (!err) {
+                //批量插入
+                //var blogData = [articleList.length];
+                //for( var i = 0; i < articleList.length; i++){
+                //    blogData[i] = [ articleList[i].auther, "" + articleList[i].title, "" + articleList[i].url, "" + articleList[i].pubDate];
+                //}
+                var insertNumber = 0;
+                articleList.forEach(function(article){
+                    insertNumber++;
+                    connection.query('select * from IOSBlogTable where title=?', article.title, function(err, rows){
+                        if (!err && (rows===null || rows.length===0)) {
+                            connection.query('insert into IOSBlogTable set ?', article, function(error){
+                                if (!error) {
+                                    console.log('insert success!');
+                                    if (insertNumber == articleList.length) {
+                                        connection.release();
+                                    }
+                                }else{
+                                    console.log(error.message);
+                                    if (insertNumber == articleList.length) {
+                                        connection.release();
+                                    }
+                                }
+                            });
+                        } else {
+                            if (insertNumber == articleList.length) {
+                                connection.release();
+                            }
+                        }
+                    });
+                });
+            } else {
+                console.log(err.message);
+            }
+        });
+    }
+};
 
 exports.startSpider = startSpider;

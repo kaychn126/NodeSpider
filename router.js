@@ -1,9 +1,9 @@
 /**
  * Created by chenkai on 16/6/5.
  */
-function route(pathname,handle,response){
+function route(pathname, handle, request, response){
     if (typeof handle[pathname] === 'function') {
-        handle[pathname](response);
+        handle[pathname](request, response);
     } else {
         console.log("No request handler found for " + pathname);
         response.writeHead(404, {"Content-Type": "text/plain"});
