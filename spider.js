@@ -35,10 +35,22 @@ function startSpider(){
 };
 
 function spiderBlogs(){
+    var spiderList = [
+        tangQiaoBlogSpider,
+        casaBlogSpider,
+        glowingSpider,
+        blueBoxSpider
+    ];
+
+    var count = 1;
+    spiderList.forEach(function(handle){
+        count++;
+        setTimeout(handle(),count*20000);
+    });
     //tangQiaoBlogSpider();
     //casaBlogSpider();
     //glowingSpider();
-    blueBoxSpider();
+    //blueBoxSpider();
 };
 
 function insertArticleList(articleList){
@@ -75,6 +87,7 @@ function insertArticleList(articleList){
 
 //唐巧博客
 function tangQiaoBlogSpider(){
+    console.log('tangQiaoBlogSpider');
     var pageList = [],//爬取网址列表
         articleList = [],//文章列表
         pageNum = 0,
@@ -120,6 +133,7 @@ function tangQiaoBlogSpider(){
 //    </ul>
 //casa的博客
 function casaBlogSpider(){
+    console.log('casaBlogSpider');
     var articleList = [];
     superagent.get('http://casatwy.com/archives.html')
         .end(function(err1, pres){
@@ -144,6 +158,7 @@ function casaBlogSpider(){
 
 //glowing团队的博客
 function glowingSpider(){
+    console.log('glowingSpider');
     var articleList = [];
     superagent.get('http://tech.glowing.com/cn/')
         .end(function(err1, pres1){
@@ -184,7 +199,6 @@ function blueBoxSpider() {
     superagent.get('https://blog.cnbluebox.com/blog/archives/')
         .end(function(err1, pres){
             if (!err1) {
-                console.log(pres.text);
                 var $ = cheerio.load(pres.text);
                 for (var i = 0; i < $('.archives').length; i++) {
                     for (var j = 0; j < $('.archives').eq(i).find('article').length; j++) {
@@ -195,6 +209,7 @@ function blueBoxSpider() {
                         var date = new Date($('.archives').eq(i).find('article').eq(j).find('.meta').find('time').attr('datetime'));
                         article.pubDate = moment(date).format("YYYY-MM-DD");
                         article.headUrl = 'https://blog.cnbluebox.com' + $('.profilepic').find('img').attr('src');
+                        articleList.push(article);
                     }
                 }
             }else {
