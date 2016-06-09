@@ -21,10 +21,11 @@ function articleList(request, response) {
     pool.getConnection(function(err, connection) {
         if (!err) {
             connection.query('select * from IOSBlogTable order by "pubDate" limit ?,?',[pageBegin, pageNumber], function(err2, rows){
+                response.writeHead(200, {"Content-Type": "text/html; charset=utf-8"});
                 if (err2){
                     response.write(err2.message);
                 }else {
-                    response.write(JSON.stringify(rows));
+                    response.write(JSON.stringify(rows, "utf8"));
                 }
                 response.end();
                 connection.release();

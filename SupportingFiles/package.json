@@ -20,6 +20,7 @@
     "node-mysql": "^2.10.2",
     "node-schedule": "^1.1.0",
     "node-uuid": "^1.4.7",
-    "superagent": "^2.0.0"
+    "superagent": "^2.0.0",
+    "moment": "^2.13.0"
   }
 }
