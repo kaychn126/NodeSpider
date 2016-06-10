@@ -23,15 +23,14 @@ var pool = mysql.createPool({
 });
 
 function startSpider(){
-    //var rule = new schedule.RecurrenceRule();
-    //rule.dayOfWeek = [0, new schedule.Range(1,6)];
-    //rule.hour = 8;
-    //rule.minute = 0;
-    //var scheduleJob = schedule.scheduleJob(rule, function(){
-    //    console.log("开始爬取博客");
-    //    spiderBlogs();
-    //});
-    spiderBlogs();
+    //每天12点和24点爬取文章
+    var rule = new schedule.RecurrenceRule();
+    rule.dayOfWeek = [0, new schedule.Range(1,6)];
+    rule.hour = [12,24];
+    rule.minute = 0;
+    var scheduleJob = schedule.scheduleJob(rule, function(){
+        spiderBlogs();
+    });
 };
 
 function spiderBlogs(){
@@ -39,18 +38,18 @@ function spiderBlogs(){
         tangQiaoBlogSpider,
         casaBlogSpider,
         glowingSpider,
-        blueBoxSpider
+        oneVDenSpider
     ];
 
-    var count = 1;
+    //每间隔20秒爬取一个博客
+    var count = 0;
     spiderList.forEach(function(handle){
         count++;
-        setTimeout(handle(),count*20000);
+        setTimeout(function(){
+            handle();
+        },count*20000);
     });
-    //tangQiaoBlogSpider();
-    //casaBlogSpider();
-    //glowingSpider();
-    //blueBoxSpider();
+
 };
 
 function insertArticleList(articleList){
@@ -70,7 +69,6 @@ function insertArticleList(articleList){
                             article.createDate = new Date();
                             connection.query('insert into IOSBlogTable set ?', article, function(error){
                                 if (!error) {
-                                    console.log('insert success!');
                                 }else{
                                     console.log(error.message);
                                 }
@@ -87,7 +85,6 @@ function insertArticleList(articleList){
 
 //唐巧博客
 function tangQiaoBlogSpider(){
-    console.log('tangQiaoBlogSpider');
     var pageList = [],//爬取网址列表
         articleList = [],//文章列表
         pageNum = 0,
@@ -126,14 +123,8 @@ function tangQiaoBlogSpider(){
         });
 };
 
-//    <ul id="fruits">
-//    <li class="apple">Apple</li>
-//    <li class="orange">Orange</li>
-//    <li class="pear">Pear</li>
-//    </ul>
 //casa的博客
 function casaBlogSpider(){
-    console.log('casaBlogSpider');
     var articleList = [];
     superagent.get('http://casatwy.com/archives.html')
         .end(function(err1, pres){
@@ -158,7 +149,6 @@ function casaBlogSpider(){
 
 //glowing团队的博客
 function glowingSpider(){
-    console.log('glowingSpider');
     var articleList = [];
     superagent.get('http://tech.glowing.com/cn/')
         .end(function(err1, pres1){
@@ -194,24 +184,51 @@ function glowingSpider(){
         });
 };
 
-function blueBoxSpider() {
+//王巍的博客
+function oneVDenSpider() {
     var articleList = [];
-    superagent.get('https://blog.cnbluebox.com/blog/archives/')
-        .end(function(err1, pres){
+    superagent.get('https://onevcat.com/#blog')
+        .set({
+            'User-Agent':       'Super Agent/0.0.1',
+            'Content-Type':     'application/x-www-form-urlencoded'
+        })
+        .end(function(err1, pres1){
             if (!err1) {
-                var $ = cheerio.load(pres.text);
-                for (var i = 0; i < $('.archives').length; i++) {
-                    for (var j = 0; j < $('.archives').eq(i).find('article').length; j++) {
-                        var article = {};
-                        article.auther = "刘坤";
-                        article.title = $('.archives').eq(i).find('article').eq(j).find('h1').find('a').text();
-                        article.url = 'https://blog.cnbluebox.com' + $('.archives').eq(i).find('article').eq(j).find('h1').find('a').attr('href');
-                        var date = new Date($('.archives').eq(i).find('article').eq(j).find('.meta').find('time').attr('datetime'));
-                        article.pubDate = moment(date).format("YYYY-MM-DD");
-                        article.headUrl = 'https://blog.cnbluebox.com' + $('.profilepic').find('img').attr('src');
-                        articleList.push(article);
+                var $ = cheerio.load(pres1.text);
+                var pns = $('.pagination__page-number').text();
+                var pn = parseInt(pns.slice(pns.length-2));
+                var pageList = [];
+                for (var i = 1; i <= pn; i++) {
+                    if (i == 1) {
+                        pageList.push('https://onevcat.com/#blog');
+                    } else {
+                        pageList.push('https://onevcat.com/page/' + i + '/#blog');
                     }
                 }
+
+                var queriedPageN = 0;
+                pageList.forEach(function(pageUrl){
+                    superagent.get(pageUrl)
+                        .end(function(err2, pres2){
+                            queriedPageN++;
+                            if (!err2) {
+                                var $1 = cheerio.load(pres2.text);
+                                for (var j = 0; j < $1('.post-list').find('li').length; j++){
+                                    var article = {};
+                                    article.auther = '王巍';
+                                    article.title  = $1('.post-list').find('li').eq(j).find('h2').find('a').text();
+                                    article.url = 'https://onevcat.com' + $1('.post-list').find('li').eq(j).find('h2')
+                                            .find('a').attr('href');
+                                    article.pubDate = $1('.post-list__meta').find('post-list__meta').text();
+                                    article.headUrl = 'https://onevcat.com' + $1('.blog-button').find('img').attr('src');
+                                    articleList.push(article);
+                                    if (queriedPageN == pn && j == $1('.post-list').find('li').length-1) {
+                                        insertArticleList(articleList);
+                                    }
+                                }
+                            }
+                        });
+                });
             }else {
                 console.log(err1.message);
             }
