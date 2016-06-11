@@ -54,6 +54,7 @@ function spiderBlogs(){
 };
 
 function insertArticleList(articleList){
+
     if (articleList.length!=0) {
         pool.getConnection(function(err, connection) {
             if (!err) {
@@ -65,29 +66,29 @@ function insertArticleList(articleList){
                 var insertNumber = 0;
                 articleList.forEach(function(article){
                     insertNumber++;
-                    connection.query('select * from IOSBlogTable where title=?', article.title, function(err, rows){
-                        if (!err && (rows===null || rows.length===0)) {
-                            connection.query('select * from BlogAutherTable where autherName=?',article.auther, function(err1, rows1){
-                                if (!err1) {
+                    connection.query('select * from IOSBlogTable where title=?', article.title, function(err1, rows){
+                        if (!err1 && (rows===null || rows.length===0)) {
+                            connection.query('select * from BlogAutherTable where autherName=?',article.auther, function(err2, rows1){
+                                if (!err2) {
                                     if (rows1===null || rows1.length===0) {
                                         //不存在该博主,则创建
                                         var auther = {};
                                         auther.autherId = guid.guid();
                                         auther.autherName = article.autherName;
                                         auther.headUrl = article.headUrl;
-                                        connection.query('insert into BlogAutherTable set ?', auther, function(err2){
-                                            if (!err2) {
+                                        connection.query('insert into BlogAutherTable set ?', auther, function(err3){
+                                            if (!err3) {
                                                 //博主入库成功
                                                 article.createDate = new Date();
                                                 article.autherId = auther.autherId;
-                                                connection.query('insert into IOSBlogTable set ?', article, function(error){
-                                                    if (!error) {
+                                                connection.query('insert into IOSBlogTable set ?', article, function(err4){
+                                                    if (!err4) {
                                                     } else {
-                                                        console.log(error.message);
+                                                        console.log(err4.message);
                                                     }
                                                 });
                                             } else {
-                                                console.log('博主入库错误' + err2.message);
+                                                console.log('博主入库错误' + err3.message);
                                             }
                                         });
                                     }
