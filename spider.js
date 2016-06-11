@@ -72,9 +72,10 @@ function insertArticleList(articleList){
                                 if (!err2) {
                                     if (rows1===null || rows1.length===0) {
                                         //不存在该博主,则创建
+                                        console.log(article);
                                         var auther = {};
                                         auther.autherId = guid.guid();
-                                        auther.autherName = article.autherName;
+                                        auther.autherName = article.auther;
                                         auther.headUrl = article.headUrl;
                                         connection.query('insert into BlogAutherTable set ?', auther, function(err3){
                                             if (!err3) {
