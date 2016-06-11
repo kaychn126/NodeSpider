@@ -83,7 +83,15 @@ function insertArticleList(articleList){
                         autherList.push(auther);
                     }
                 }
-                console.log(autherList);
+
+                autherList.forEach(function(auther){
+                    connection.query('insert ignore into BlogAutherTable set ?', auther, function(err5){
+                        if (err5) {
+                            console.log('博主入库错误:' + err5.message);
+                        }
+                    });
+                });
+
             } else {
                 console.log(err.message);
             }
