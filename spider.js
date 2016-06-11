@@ -73,7 +73,8 @@ function insertArticleList(articleList){
                 });
 
                 var autherList = [];
-                articleList.forEach(function(article){
+                for (var i = 0; i < articleList.length; i++) {
+                    var article = articleList[i];
                     if (!containAuther(autherList, article)) {
                         var auther = {};
                         auther.autherId = guid.guid();
@@ -81,9 +82,8 @@ function insertArticleList(articleList){
                         auther.headUrl = article.headUrl;
                         autherList.push(auther);
                     }
-                });
+                }
                 console.log(autherList);
-
             } else {
                 console.log(err.message);
             }
