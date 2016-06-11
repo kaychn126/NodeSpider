@@ -54,7 +54,6 @@ function spiderBlogs(){
 };
 
 function insertArticleList(articleList){
-
     if (articleList.length!=0) {
         pool.getConnection(function(err, connection) {
             if (!err) {
@@ -81,6 +80,7 @@ function insertArticleList(articleList){
 
 //唐巧博客
 function tangQiaoBlogSpider(){
+    console.log('tangQiaoBlogSpider');
     var pageList = [],//爬取网址列表
         articleList = [],//文章列表
         pageNum = 0,
@@ -121,6 +121,7 @@ function tangQiaoBlogSpider(){
 
 //casa的博客
 function casaBlogSpider(){
+    console.log('casaBlogSpider');
     var articleList = [];
     superagent.get('http://casatwy.com/archives.html')
         .end(function(err1, pres){
@@ -145,6 +146,7 @@ function casaBlogSpider(){
 
 //glowing团队的博客
 function glowingSpider(){
+    console.log('glowingSpider');
     var articleList = [];
     superagent.get('http://tech.glowing.com/cn/')
         .end(function(err1, pres1){
@@ -182,6 +184,7 @@ function glowingSpider(){
 
 //王巍的博客
 function oneVDenSpider() {
+    console.log('oneVDenSpider');
     var articleList = [];
     superagent.get('https://onevcat.com/#blog')
         .set({
