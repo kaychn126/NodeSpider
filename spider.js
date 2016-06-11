@@ -94,7 +94,7 @@ function insertArticleList(articleList){
 function containAuther(autherList, article){
     for (var i = 0; i < autherList.length; i++) {
         var auther = autherList[i];
-        if (auther.autherName == article) {
+        if (auther.autherName == article.auther) {
             return true;
         }
     }
