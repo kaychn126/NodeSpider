@@ -13,7 +13,7 @@ var http = require("http"),
     moment = require("moment");
     config = require("./supportingFiles/config"),
     dbConfig = new config.dbConfig();
-
+    guid = require("./spidertool");
 
 var pool = mysql.createPool({
     host     : dbConfig.dbhost,
@@ -24,13 +24,14 @@ var pool = mysql.createPool({
 
 function startSpider(){
     //每天12点和24点爬取文章
-    var rule = new schedule.RecurrenceRule();
-    rule.dayOfWeek = [0, new schedule.Range(1,6)];
-    rule.hour = [12,24];
-    rule.minute = 0;
-    var scheduleJob = schedule.scheduleJob(rule, function(){
-        spiderBlogs();
-    });
+    //var rule = new schedule.RecurrenceRule();
+    //rule.dayOfWeek = [0, new schedule.Range(1,6)];
+    //rule.hour = [12,24];
+    //rule.minute = 0;
+    //var scheduleJob = schedule.scheduleJob(rule, function(){
+    //    spiderBlogs();
+    //});
+    spiderBlogs();
 };
 
 function spiderBlogs(){
@@ -66,11 +67,30 @@ function insertArticleList(articleList){
                     insertNumber++;
                     connection.query('select * from IOSBlogTable where title=?', article.title, function(err, rows){
                         if (!err && (rows===null || rows.length===0)) {
-                            article.createDate = new Date();
-                            connection.query('insert into IOSBlogTable set ?', article, function(error){
-                                if (!error) {
-                                }else{
-                                    console.log(error.message);
+                            connection.query('select * from BlogAutherTable where autherName=?',article.auther, function(err1, rows1){
+                                if (!err1) {
+                                    if (rows1===null || rows1.length===0) {
+                                        //不存在该博主,则创建
+                                        var auther = {};
+                                        auther.autherId = guid.guid();
+                                        auther.autherName = article.autherName;
+                                        auther.headUrl = article.headUrl;
+                                        connection.query('insert into BlogAutherTable set ?', auther, function(err2){
+                                            if (!err2) {
+                                                //博主入库成功
+                                                article.createDate = new Date();
+                                                article.autherId = auther.autherId;
+                                                connection.query('insert into IOSBlogTable set ?', article, function(error){
+                                                    if (!error) {
+                                                    } else {
+                                                        console.log(error.message);
+                                                    }
+                                                });
+                                            } else {
+                                                console.log('博主入库错误' + err2.message);
+                                            }
+                                        });
+                                    }
                                 }
                             });
                         }
