@@ -67,6 +67,11 @@ function insertArticleList(articleList){
                     connection.query('insert ignore into IOSBlogTable set ?', article, function(err4){
                         if (!err4) {
                         } else {
+                            connection.query('update BlogAutherTable set articleNumber=articleNumber+1',function(err5){
+                                if (err5) {
+                                    console.log(err5.message);
+                                }
+                            });
                             console.log(err4.message);
                         }
                     });
@@ -251,7 +256,7 @@ function oneVDenSpider() {
                                     article.title  = $1('.post-list').find('li').eq(j).find('h2').find('a').text();
                                     article.url = 'https://onevcat.com' + $1('.post-list').find('li').eq(j).find('h2')
                                             .find('a').attr('href');
-                                    article.pubDate = $1('.post-list__meta').find('time').text();
+                                    article.pubDate = $1('.post_list').eq(j).find('.post-list__meta').find('time').text();
                                     article.headUrl = 'https://onevcat.com' + $1('.blog-button').find('img').attr('src');
                                     articleList.push(article);
                                     if (queriedPageN == pn && j == $1('.post-list').find('li').length-1) {
