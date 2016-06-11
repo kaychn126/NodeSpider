@@ -3,6 +3,8 @@
  */
 function route(pathname, handle, request, response){
     if (typeof handle[pathname] === 'function') {
+        var openuuid = req.header('openuuid');
+        console.log('openuuid:' + openuuid);
         handle[pathname](request, response);
     } else {
         console.log("No request handler found for " + pathname);
