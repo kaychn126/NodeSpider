@@ -68,9 +68,9 @@ function insertArticleList(articleList){
                     insertNumber++;
                     connection.query('select * from IOSBlogTable where title=?', article.title, function(err1, rows){
                         if (!err1 && (rows===null || rows.length===0)) {
-                            connection.query('select * from BlogAutherTable where autherName=?',article.auther, function(err2, rows1){
+                            connection.query('select * from BlogAutherTable where autherName=?',article.auther, function(err2, rows2){
                                 if (!err2) {
-                                    if (rows1===null || rows1.length===0) {
+                                    if (rows2===null || rows2.length===0) {
                                         //不存在该博主,则创建
                                         var auther = {};
                                         auther.autherId = guid.guid();
@@ -89,6 +89,17 @@ function insertArticleList(articleList){
                                                 });
                                             } else {
                                                 console.log('博主入库错误' + err3.message);
+                                            }
+                                        });
+                                    } else {
+                                        //存在
+                                        var auther = rows2[0];
+                                        article.createDate = new Date();
+                                        article.autherId = auther.autherId;
+                                        connection.query('insert into IOSBlogTable set ?', article, function(err4){
+                                            if (!err4) {
+                                            } else {
+                                                console.log(err4.message);
                                             }
                                         });
                                     }
