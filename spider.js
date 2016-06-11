@@ -92,11 +92,12 @@ function insertArticleList(articleList){
 };
 
 function containAuther(autherList, article){
-    autherList.forEach(function(auther){
+    for (var i = 0; i < autherList.length; i++) {
+        var auther = autherList[i];
         if (auther.autherName == article) {
             return true;
         }
-    });
+    }
     return false;
 };
 
