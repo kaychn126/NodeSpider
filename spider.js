@@ -66,7 +66,7 @@ function insertArticleList(articleList){
                     article.createDate = new Date();
                     connection.query('insert ignore into IOSBlogTable set ?', article, function(err4){
                         if (!err4) {
-                            connection.query('update BlogAutherTable set articleNumber=articleNumber+1',function(err5){
+                            connection.query('update BlogAutherTable where autherName=? set articleNumber=articleNumber+1',article.auther ,function(err5){
                                 if (err5) {
                                     console.log(err5.message);
                                 }
