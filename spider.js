@@ -48,7 +48,7 @@ function spiderBlogs(){
         count++;
         setTimeout(function(){
             handle();
-        },count*20000);
+        },count*20000+1000);
     });
 
 };
@@ -72,7 +72,6 @@ function insertArticleList(articleList){
                                 if (!err2) {
                                     if (rows1===null || rows1.length===0) {
                                         //不存在该博主,则创建
-                                        console.log(article);
                                         var auther = {};
                                         auther.autherId = guid.guid();
                                         auther.autherName = article.auther;

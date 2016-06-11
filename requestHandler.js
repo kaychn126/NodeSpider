@@ -48,7 +48,7 @@ function autherList(request, response) {
     var pageBegin = (pageNo-1)*pageNumber;
     pool.getConnection(function(err, connection) {
         if (!err) {
-            connection.query('SELECT DISTINCT(auther) FROM IOSBlogTable LIMIT ?,?',[pageBegin, pageNumber], function(err2, rows){
+            connection.query('SELECT * FROM BlogAutherTable LIMIT ?,?',[pageBegin, pageNumber], function(err2, rows){
                 response.writeHead(200, {"Content-Type": "application/json; charset=utf-8"});
                 if (err2){
                     response.write(err2.message);
