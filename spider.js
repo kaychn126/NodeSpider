@@ -45,10 +45,10 @@ function spiderBlogs(){
     //每间隔20秒爬取一个博客
     var count = 0;
     spiderList.forEach(function(handle){
-        count++;
         setTimeout(function(){
             handle();
-        },count*20000+1000);
+        },count*20000);
+        count++;
     });
 
 };
@@ -71,11 +71,33 @@ function insertArticleList(articleList){
                         }
                     });
                 });
+
+                var autherList = [];
+                articleList.forEach(function(article){
+                    if (!containAuther(autherList, article)) {
+                        var auther = {};
+                        auther.autherId = guid.guid();
+                        auther.autherName = article.auther;
+                        auther.headUrl = article.headUrl;
+                        autherList.push(auther);
+                    }
+                });
+                console.log(autherList);
+
             } else {
                 console.log(err.message);
             }
         });
     }
+};
+
+function containAuther(autherList, article){
+    autherList.forEach(function(auther){
+        if (auther.autherName == article) {
+            return true;
+        }
+    });
+    return false;
 };
 
 //唐巧博客
