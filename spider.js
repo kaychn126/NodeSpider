@@ -134,6 +134,7 @@ function tangQiaoBlogSpider(){
                             for(var j = 0; j < currentPageUrls.length; j++){
                                 var article = {};
                                 article.auther = '唐巧';
+                                article.headUrl = 'http://ww4.sinaimg.cn/small/65dc76a3jw8exkme9y57dj20yi0ymabn.jpg';
                                 article.title = currentPageUrls.eq(j).find('a').attr('title');
                                 article.url = 'http://blog.devtang.com' + currentPageUrls.eq(j).find('a').attr('href');
                                 article.pubDate = currentPageUrls.eq(j).find('time').text();
@@ -162,6 +163,7 @@ function casaBlogSpider(){
                 for (var i = 0; i < articleNumber; i++) {
                     var article = {};
                     article.auther = 'Casa Taloyum';
+                    article.headUrl = 'http://casatwy.com/pics/casa.png';
                     article.title = $('#archives').find('a').eq(i).text();
                     article.url = $('#archives').find('a').eq(i).attr('href');
                     var date = new Date($('#archives').find('time').eq(i).attr('datetime'));
@@ -249,7 +251,7 @@ function oneVDenSpider() {
                                     article.title  = $1('.post-list').find('li').eq(j).find('h2').find('a').text();
                                     article.url = 'https://onevcat.com' + $1('.post-list').find('li').eq(j).find('h2')
                                             .find('a').attr('href');
-                                    article.pubDate = $1('.post-list__meta').find('post-list__meta').text();
+                                    article.pubDate = $1('.post-list__meta').find('time').text();
                                     article.headUrl = 'https://onevcat.com' + $1('.blog-button').find('img').attr('src');
                                     articleList.push(article);
                                     if (queriedPageN == pn && j == $1('.post-list').find('li').length-1) {

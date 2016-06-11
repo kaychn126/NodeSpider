@@ -24,7 +24,7 @@ function articleList(request, response) {
             var sql = 'select * from IOSBlogTable order by "pubDate" limit ?,?';
             var inserts = [pageBegin, pageNumber];
             if (auther) {
-                sql = 'select * from IOSBlogTable where auther=? order by "createDate" limit ?,?';
+                sql = 'select * from IOSBlogTable where auther=? order by "pubDate" limit ?,?';
                 inserts = [auther ,pageBegin, pageNumber];
             }
             connection.query(sql,inserts, function(err2, rows){
