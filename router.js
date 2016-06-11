@@ -3,7 +3,7 @@
  */
 function route(pathname, handle, request, response){
     if (typeof handle[pathname] === 'function') {
-        var openuuid = request.headers('openuuid');
+        var openuuid = request.headers['openuuid'];
         console.log('openuuid:' + openuuid);
         handle[pathname](request, response);
     } else {
