@@ -31,7 +31,8 @@ function startSpider(){
     //var scheduleJob = schedule.scheduleJob(rule, function(){
     //    spiderBlogs();
     //});
-    spiderBlogs();
+    //spiderBlogs();
+    beyondvincentSpider();
 };
 
 function spiderBlogs(){
@@ -39,7 +40,8 @@ function spiderBlogs(){
         tangQiaoBlogSpider,
         casaBlogSpider,
         glowingSpider,
-        oneVDenSpider
+        oneVDenSpider,
+        beyondvincentSpider
     ];
 
     //每间隔20秒爬取一个博客
@@ -264,6 +266,47 @@ function oneVDenSpider() {
             }else {
                 console.log(err1.message);
             }
+        });
+};
+
+//破船之家
+function beyondvincentSpider() {
+    console.log("beyondvincentSpider");
+    var articleList = [];
+    superagent.get('http://beyondvincent.com/')
+        .end(function(err1, pres1){
+            var $ = cheerio.load(pres1.text);
+            var pageNumber = parseInt($('#page-nav').find('.space').next().text());
+            var pageList = [];
+            for (var i = 1; i <= pageNumber; i++) {
+                pageList.push('http://beyondvincent.com/page/' + i + '/');
+            }
+
+            var queryPageNumber = 0;
+            pageList.forEach(function(pageUrl){
+                superagent.get(pageUrl)
+                    .end(function(err2, pres2){
+                        if (!err2) {
+                            queryPageNumber++;
+                            var $1 = cheerio.load(pres2.text);
+                            var articleNumber = $1('.mid-col').find('article').length;
+                            for (var j = 0; j < articleNumber; j++) {
+                                var article = {};
+                                article.auther = '破船之家';
+                                article.headUrl = 'https://avatars1.githubusercontent.com/u/3365146?v=3&s=460';
+                                article.title = $1('.mid-col').find('article').eq(j).find('.article-title').text();
+                                var date = new Date($1('.mid-col').find('article').eq(j).find('.article-date').find('time').attr('datetime'));
+                                article.pubDate = article.pubDate = moment(date).format("YYYY-MM-DD");
+                                article.url = 'https://avatars1.githubusercontent.com' + $1('.mid-col').find('article').eq(j).find('.article-title').attr('href');
+                                articleList.push(article);
+                                console.log(article);
+                                if (queryPageNumber == pageNumber && j == articleNumber-1) {
+                                    insertArticleList(articleList);
+                                }
+                            }
+                        }
+                    });
+            });
         });
 };
 
