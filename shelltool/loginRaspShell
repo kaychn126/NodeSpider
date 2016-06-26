@@ -1,0 +1,7 @@
+#!/usr/bin/expect
+
+spawn ssh pi@192.168.1.110
+expect "password:"
+send "raspberry\r"
+send "sh startNode.sh\r"
+interact
