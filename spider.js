@@ -23,16 +23,15 @@ var pool = mysql.createPool({
 });
 
 function startSpider(){
-    //每天12点和24点爬取文章
-    //var rule = new schedule.RecurrenceRule();
-    //rule.dayOfWeek = [0, new schedule.Range(1,6)];
-    //rule.hour = [12,24];
-    //rule.minute = 0;
-    //var scheduleJob = schedule.scheduleJob(rule, function(){
-    //    spiderBlogs();
-    //});
-    //spiderBlogs();
-    beyondvincentSpider();
+    每天12点和24点爬取文章
+    var rule = new schedule.RecurrenceRule();
+    rule.dayOfWeek = [0, new schedule.Range(1,6)];
+    rule.hour = [12,24];
+    rule.minute = 0;
+    var scheduleJob = schedule.scheduleJob(rule, function(){
+        spiderBlogs();
+    });
+    //beyondvincentSpider();
 };
 
 function spiderBlogs(){
