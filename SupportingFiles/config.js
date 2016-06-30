@@ -5,7 +5,7 @@
 function dbConfig(){
     this.dbhost = 'localhost';
     this.dbuser = 'root';
-    this.dbpassword = 'kaychn1989';
+    this.dbpassword = '*******';
     this.database = 'IOSBlogDB';
 };
 
